@@ -1,0 +1,35 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Event Details {{ event?.title }} </ion-title>
+  </ion-navbar>
+  <button ion-button (click)="toggleFavorite()" color="light">
+    <ion-icon [name]="event.isFavorite ? 'star' : 'star-outline'" item-start color="secondary"></ion-icon>
+  </button>
+</ion-header>
+
+<ion-content padding>
+  <ion-item>
+    <h1>Título</h1>
+    <p>{{ event.title }}</p>
+  </ion-item>
+  <ion-item>
+    <h3>Descripción</h3>
+    <p> {{ event.description }} </p>
+  </ion-item>
+  <ion-item>
+    <h3>Fecha</h3>
+    <p> {{ event.event_date }} </p>
+  </ion-item>
+  <ion-item>
+    <h3>Hora</h3>
+    <p> {{ event.event_time }} </p>
+  </ion-item>
+  <ion-item>
+    <h3>Ubicación</h3>
+    <p> {{ event.location_name }} </p>
+  </ion-item>
+  <ion-item>
+    <h3>Imagen</h3>
+    <img [src]="event.image?.url" alt="Imagen del evento" class="event-image">
+  </ion-item>
+</ion-content>
