@@ -12,6 +12,10 @@ export class HomePage {
 
   events: any[] = [];
   isFavorite = false;
+  filteredEvents: any[] = [];
+  startDate: string;
+  endDate: string;
+
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private favoriteProvider: FavoriteProvider, private eventsApi: EventsapiProvider) { }
 
@@ -26,6 +30,8 @@ export class HomePage {
           return new Date(a.event_date).getTime() - new Date(b.event_date).getTime();
         });
 
+        // Set filteredEvents to show all events initially
+        this.filteredEvents = [...this.events];
 
         this.favoriteProvider.getAllFavorites().then(favorites => {
           if (favorites) {
@@ -72,19 +78,22 @@ export class HomePage {
     });
   };
 
-  //   filterEvents() {
-  //   if (this.startDate && this.endDate) {
-  //     const start = new Date(this.startDate).getTime();
-  //     const end = new Date(this.endDate).getTime();
+  filterByDateRange() {
+    if (!this.startDate || !this.endDate) {
+      this.filteredEvents = [...this.events]; // Show all events if no dates are selected
+      return;
+    }
 
-  //     this.filteredEvents = this.events.filter(event => {
-  //       const eventDate = new Date(event.event_date).getTime();
-  //       return eventDate >= start && eventDate <= end;
-  //     });
-  //   } else {
-  //     console.warn("Selecciona un rango de fechas válido.");
-  //   }
-  // }
+    this.filteredEvents = this.events.filter(event => {
+      let eventDate = new Date(event.event_date).toISOString().split('T')[0]; // Normalize to YYYY-MM-DD
+      let start = new Date(this.startDate).toISOString().split('T')[0];
+      let end = new Date(this.endDate).toISOString().split('T')[0];
+      return eventDate >= start && eventDate <= end;
+    });
+
+    console.log('Eventos filtrados:', this.filteredEvents);
+  }
+
 
 
   ionViewWillLoad() {

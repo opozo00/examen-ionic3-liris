@@ -17,9 +17,9 @@
     <ion-datetime displayFormat="DD-MM-YYYY" [(ngModel)]="endDate"></ion-datetime>
   </ion-item>
 
-  <button ion-button (click)="filterEvents()" full>Filtrar Eventos</button>
+  <button ion-button (click)="filterByDateRange()" full>Filtrar Eventos</button>
   <ion-list *ngIf="events && events.length">
-    <ion-card *ngFor="let event of events" (click)="viewEvent(event)">
+    <ion-card *ngFor="let event of filteredEvents" (click)="viewEvent(event)">
       <img [src]="event.image?.url" alt="Imagen del evento" class="event-image">
       <ion-card-content>
         <ion-icon [name]="event.isFavorite ? 'star' : 'star-outline'" item-start color="secondary"></ion-icon>
@@ -31,42 +31,16 @@
       </ion-card-content>
     </ion-card>
   </ion-list>
-  <div *ngIf="!events.length">
-    <ion-list>
-      <ion-list-header>
-        <ion-skeleton-text animated style="width: 80px"></ion-skeleton-text>
-      </ion-list-header>
-      <ion-item>
-        <ion-thumbnail slot="start">
-          <ion-skeleton-text></ion-skeleton-text>
-        </ion-thumbnail>
-        <ion-label>
-          <h3>
-            <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
-          </h3>
-          <p>
-            <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
-          </p>
-        </ion-label>
-      </ion-item>
-    </ion-list>
+  <ion-list>
+    <ion-item *ngFor="let item of filteredItems">
+      {{ item.title }} - {{ item.event_date }}
+    </ion-item>
+  </ion-list>
+  <div *ngIf="!events.length" class="skeleton-container">
+    <!-- Skeleton Text -->
+    <div class="skeleton skeleton-title"></div>
+    <div class="skeleton skeleton-line"></div>
+    <div class="skeleton skeleton-line"></div>
+    <div class="skeleton skeleton-line"></div>
   </div>
 </ion-content>
-
-<!-- <ion-item>
-  <ion-label>Fecha inicio</ion-label>
-  <ion-datetime displayFormat="YYYY-MM-DD" [(ngModel)]="startDate"></ion-datetime>
-</ion-item>
-
-<ion-item>
-  <ion-label>Fecha fin</ion-label>
-  <ion-datetime displayFormat="YYYY-MM-DD" [(ngModel)]="endDate"></ion-datetime>
-</ion-item>
-
-<button ion-button (click)="filterEvents()">Filtrar Eventos</button>
-
-<ion-list>
-  <ion-item *ngFor="let event of filteredEvents">
-    {{ event.event_date }} - {{ event.name }}
-  </ion-item>
-</ion-list> -->
