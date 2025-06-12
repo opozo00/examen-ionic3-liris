@@ -3,6 +3,8 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { FavoriteProvider } from '../../providers/favorite/favorite';
 import { EventsapiProvider } from '../../providers/eventsapi/eventsapi';
 import { EventDetailsPage } from '../event-details/event-details';
+import * as moment from 'moment';
+import { SocialSharing } from '@ionic-native/social-sharing';
 
 @Component({
   selector: 'page-home',
@@ -15,9 +17,24 @@ export class HomePage {
   filteredEvents: any[] = [];
   startDate: string;
   endDate: string;
+  //momentjs: any = moment;
 
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private favoriteProvider: FavoriteProvider, private eventsApi: EventsapiProvider) { }
+  constructor(public navCtrl: NavController, public navParams: NavParams, private favoriteProvider: FavoriteProvider, private eventsApi: EventsapiProvider, private socialSharing: SocialSharing) { }
+
+  compileMessage(index): string {
+    let msg = this.filteredEvents[index].title + '-' + this.filteredEvents[index].location_name;
+    return msg.concat('\n Enviado desde app de eventos!')
+  }
+
+  regularShare(index) {
+    var msg = this.compileMessage(index);
+    this.socialSharing.share(msg, null, null, null);
+  }
+  facebookShare(index) {
+    var msg = this.compileMessage(index);
+    this.socialSharing.shareViaFacebook(msg, null, null);
+  }
 
   loadEvents() {
     this.eventsApi.getEvents().subscribe(
@@ -27,7 +44,12 @@ export class HomePage {
 
         // Sorting events by event_date
         this.events = data.sort((a: any, b: any) => {
-          return new Date(a.event_date).getTime() - new Date(b.event_date).getTime();
+          //return new Date(a.event_date).getTime() - new Date(b.event_date).getTime();
+          return moment(a.event_date).valueOf() - moment(b.event_date).valueOf();
+        });
+
+        this.events.forEach(event => {
+          event.event_date = moment(event.event_date).format('YYYY-MM-DD'); // Formato similar al del calendario
         });
 
         // Set filteredEvents to show all events initially
@@ -85,13 +107,26 @@ export class HomePage {
     }
 
     this.filteredEvents = this.events.filter(event => {
-      let eventDate = new Date(event.event_date).toISOString().split('T')[0]; // Normalize to YYYY-MM-DD
-      let start = new Date(this.startDate).toISOString().split('T')[0];
-      let end = new Date(this.endDate).toISOString().split('T')[0];
-      return eventDate >= start && eventDate <= end;
+      let eventDate = moment(event.event_date, 'YYYY-MM-DD'); // Normalize to YYYY-MM-DD
+      let start = moment(this.startDate, 'YYYY-MM-DD');
+      let end = moment(this.endDate, 'YYYY-MM-DD');
+      // return eventDate >= start && eventDate <= end;
+      return eventDate.isBetween(start, end, undefined, '[]');
     });
 
     console.log('Eventos filtrados:', this.filteredEvents);
+  }
+
+  filterByPredefinedDate(date: number) {
+    const today = moment(); // Fecha actual
+    const PredefinedDaysAgo = moment().subtract(date, 'days'); //Días anteriores
+    //const PredefinedDaysAgo = moment().add(date, 'days');   //Días próximos
+    this.filteredEvents = this.events.filter(event => {
+      const eventDay = moment(event.event_date, 'YYYY-MM-DD');
+      return eventDay.isSameOrAfter(PredefinedDaysAgo) && eventDay.isSameOrBefore(today);   //Días anteriores
+      //return eventDay.isSameOrBefore(PredefinedDaysAgo) && eventDay.isSameOrAfter(today); //Días próximos
+    });
+    console.log(`Eventos de los últimos ${date} días:`, this.filteredEvents);
   }
 
 

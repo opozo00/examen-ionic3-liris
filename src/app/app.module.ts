@@ -13,6 +13,8 @@ import { HomePage } from '../pages/home/home';
 import { EventsapiProvider } from '../providers/eventsapi/eventsapi';
 import { FavoriteProvider } from '../providers/favorite/favorite';
 import { EventDetailsPage } from '../pages/event-details/event-details';
+import { Geolocation } from '@ionic-native/geolocation'
+import { SocialSharing } from '@ionic-native/social-sharing';
 
 
 
@@ -40,6 +42,8 @@ import { EventDetailsPage } from '../pages/event-details/event-details';
   ],
   providers: [
     StatusBar,
+    Geolocation,
+    SocialSharing,
     SplashScreen,
     { provide: ErrorHandler, useClass: IonicErrorHandler },
     EventsapiProvider,

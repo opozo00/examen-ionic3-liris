@@ -22,7 +22,7 @@ export class EventsapiProvider {
     return this.http.get(this.events);
   }
   getEvent(id: number): Observable<any> {
-    return this.http.get(`${this.events}/${id}`);
+    return this.http.get(`${this.events}?id=${id}`);
   }
 
 }
