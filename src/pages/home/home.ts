@@ -1,10 +1,12 @@
-import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { Component, Sanitizer } from '@angular/core';
+import { NavController, NavParams } from 'ionic-angular';
 import { FavoriteProvider } from '../../providers/favorite/favorite';
 import { EventsapiProvider } from '../../providers/eventsapi/eventsapi';
 import { EventDetailsPage } from '../event-details/event-details';
 import * as moment from 'moment';
 import { SocialSharing } from '@ionic-native/social-sharing';
+import { InAppBrowser } from '@ionic-native/in-app-browser';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'page-home',
@@ -17,10 +19,20 @@ export class HomePage {
   filteredEvents: any[] = [];
   startDate: string;
   endDate: string;
+  selectedDays: number = null;
   //momentjs: any = moment;
+  isClicked = false;
+  // Local IP of your PC hosting WordPress (adjust to yours)
+  private localDevIP = '192.168.131.193';
+  private flipbookRelativePath = '/appdelportal/dp_eventos/evento-de-flipbook/';
+  public flipbookUrl: SafeResourceUrl;
 
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private favoriteProvider: FavoriteProvider, private eventsApi: EventsapiProvider, private socialSharing: SocialSharing) { }
+  constructor(public navCtrl: NavController, public navParams: NavParams, private favoriteProvider: FavoriteProvider, private eventsApi: EventsapiProvider, private socialSharing: SocialSharing, private iab: InAppBrowser, private sanitizer: DomSanitizer) {
+    // Build full URL dynamically
+    const rawUrl = `http://${this.localDevIP}${this.flipbookRelativePath}`;
+    this.flipbookUrl = this.sanitizer.bypassSecurityTrustResourceUrl(rawUrl);
+  }
 
   compileMessage(index): string {
     let msg = this.filteredEvents[index].title + '-' + this.filteredEvents[index].location_name;
@@ -35,6 +47,15 @@ export class HomePage {
     var msg = this.compileMessage(index);
     this.socialSharing.shareViaFacebook(msg, null, null);
   }
+
+  //Método que llama el flipbook
+  openFlipbook() {
+    this.navCtrl.push('FlipbookViewerPage', {
+      //url: 'https://yourdomain.com/flipbook-viewer/'
+      url: 'http://localhost/appdelportal/dp_eventos/evento-de-flipbook/'
+    });
+  }
+
 
   loadEvents() {
     this.eventsApi.getEvents().subscribe(
@@ -118,6 +139,8 @@ export class HomePage {
   }
 
   filterByPredefinedDate(date: number) {
+    this.selectedDays = date;
+    this.isClicked = !this.isClicked;
     const today = moment(); // Fecha actual
     const PredefinedDaysAgo = moment().subtract(date, 'days'); //Días anteriores
     //const PredefinedDaysAgo = moment().add(date, 'days');   //Días próximos
