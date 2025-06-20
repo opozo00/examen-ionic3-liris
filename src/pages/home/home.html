@@ -8,6 +8,10 @@
 
 <ion-content padding>
   <ion-item>
+    <button ion-button block color="secondary" (click)="openFlipbook()">Abrir Flipbook</button>
+  </ion-item>
+
+  <!-- <ion-item>
     <ion-label>Fecha inicio</ion-label>
     <ion-datetime displayFormat="DD-MM-YYYY" [(ngModel)]="startDate"></ion-datetime>
   </ion-item>
@@ -17,40 +21,42 @@
     <ion-datetime displayFormat="DD-MM-YYYY" [(ngModel)]="endDate"></ion-datetime>
   </ion-item>
 
-  <button ion-button (click)="filterByDateRange()" full>Filtrar Eventos</button>
-  <div class="buttons-dates">
+  <button ion-button (click)="filterByDateRange()" full>Filtrar Eventos</button> -->
+  <!-- <div class="buttons-dates">
     <button ion-button (click)="filterByPredefinedDate(1)" round>Hoy</button>
     <button ion-button (click)="filterByPredefinedDate(7)" round>Últimos 7 días</button>
     <button ion-button (click)="filterByPredefinedDate(30)" round>Últimos 30 días</button>
     <button ion-button (click)="filterByPredefinedDate(45)" round>Mes pasado</button>
     <button ion-button (click)="filterByPredefinedDate(365)" round>Este año</button>
 
-  </div>
+  </div> -->
+  <!-- <div class="buttons-dates">
+    <button ion-button round [class.selected]="selectedDays === 1" [ngClass]="isClicked ? 'active-button' : ''"
+      (click)="filterByPredefinedDate(1)">Hoy</button>
 
-  <ion-list *ngIf="events && events.length">
-    <ion-card *ngFor="let event of filteredEvents; let i = index" (click)="viewEvent(event)">
-      <!-- <ion-card *ngFor="let event of filteredEvents; let i = index"> -->
-      <img *ngIf="event.image[0]?.url; else fallbackImage"
+    <button ion-button round [class.selected]="selectedDays === 7" (click)="filterByPredefinedDate(7)">Últimos 7
+      días</button>
+
+    <button ion-button round [class.selected]="selectedDays === 30" (click)="filterByPredefinedDate(30)">Últimos 30
+      días</button>
+
+    <button ion-button round [class.selected]="selectedDays === 45" (click)="filterByPredefinedDate(45)">Mes
+      pasado</button>
+
+    <button ion-button round [class.selected]="selectedDays === 365" (click)="filterByPredefinedDate(365)">Este
+      año</button>
+  </div> -->
+
+  <!-- <ion-list *ngIf="events && events.length"> -->
+  <!-- <ion-card *ngFor="let event of filteredEvents; let i = index" (click)="viewEvent(event)"> -->
+  <!-- <ion-card *ngFor="let event of filteredEvents; let i = index"> -->
+  <!-- <img *ngIf="event.image[0]?.url; else fallbackImage"
         [src]="event.image?.url || (event.image?.length ? event.image[0]?.url : '')" alt="Imagen del evento"
         class="event-image">
       <ng-template #fallbackImage>
         <img src="../../assets/imgs/imagen-fiesta.jpg">
       </ng-template>
       <ion-card-content>
-        <!-- <ion-grid>
-          <ion-row>
-            <ion-col>
-              <button ion-button icon-only (click)="regularShare(i)" color="primary" clear>
-                <ion-icon class="share-icon" name="share"></ion-icon>
-              </button>
-            </ion-col>
-            <ion-col>
-              <button ion-button icon-only (click)="facebookShare(i)" color="primary" clear>
-                <ion-icon class="share-icon" name="logo-facebook"></ion-icon>
-              </button>
-            </ion-col>
-          </ion-row>
-        </ion-grid> -->
         <ion-icon [name]="event.isFavorite ? 'star' : 'star-outline'" item-start color="secondary"></ion-icon>
         <ion-card-title>
           {{ event.title }}
@@ -58,18 +64,20 @@
         <p>{{ event.event_date }}</p>
         <p>{{ event.description }}</p>
       </ion-card-content>
-    </ion-card>
-  </ion-list>
-  <ion-list>
+    </ion-card> -->
+
+  <!-- </ion-list> -->
+  <!-- <ion-list>
     <ion-item *ngFor="let item of filteredItems">
       {{ item.title }} - {{ item.event_date }}
     </ion-item>
-  </ion-list>
-  <div *ngIf="!events.length" class="skeleton-container">
-    <!-- Skeleton Text -->
+  </ion-list> -->
+
+  <!-- <div *ngIf="!events.length" class="skeleton-container">
+    
     <div class="skeleton skeleton-title"></div>
     <div class="skeleton skeleton-line"></div>
     <div class="skeleton skeleton-line"></div>
     <div class="skeleton skeleton-line"></div>
-  </div>
+  </div> -->
 </ion-content>

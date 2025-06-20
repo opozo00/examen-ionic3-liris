@@ -10,11 +10,13 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
+import { FlipbookViewerPage } from '../pages/flipbook-viewer/flipbook-viewer';
 import { EventsapiProvider } from '../providers/eventsapi/eventsapi';
 import { FavoriteProvider } from '../providers/favorite/favorite';
 import { EventDetailsPage } from '../pages/event-details/event-details';
 import { Geolocation } from '@ionic-native/geolocation'
 import { SocialSharing } from '@ionic-native/social-sharing';
+import { InAppBrowser } from '@ionic-native/in-app-browser';
 
 
 
@@ -25,6 +27,7 @@ import { SocialSharing } from '@ionic-native/social-sharing';
     MyApp,
     HomePage,
     EventDetailsPage,
+    //FlipbookViewerPage
   ],
   imports: [
     BrowserModule,
@@ -38,12 +41,14 @@ import { SocialSharing } from '@ionic-native/social-sharing';
   entryComponents: [
     MyApp,
     HomePage,
-    EventDetailsPage
+    EventDetailsPage,
+    //FlipbookViewerPage
   ],
   providers: [
     StatusBar,
     Geolocation,
     SocialSharing,
+    InAppBrowser,
     SplashScreen,
     { provide: ErrorHandler, useClass: IonicErrorHandler },
     EventsapiProvider,
