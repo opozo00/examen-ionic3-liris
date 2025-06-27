@@ -28,42 +28,31 @@
   </div>
 
   <ion-list *ngIf="events && events.length">
-    <ion-card *ngFor="let event of filteredEvents; let i = index" (click)="viewEvent(event)">
-      <!-- <ion-card *ngFor="let event of filteredEvents; let i = index"> -->
+    <ion-card *ngFor="let event of filteredEvents; let i = index" (click)="viewEvent(event)" class="event-card">
       <img *ngIf="event.image[0]?.url; else fallbackImage"
         [src]="event.image?.url || (event.image?.length ? event.image[0]?.url : '')" alt="Imagen del evento"
-        class="event-image">
+        class="event-image" />
       <ng-template #fallbackImage>
-        <img src="../../assets/imgs/imagen-fiesta.jpg">
+        <img src="../../assets/imgs/imagen-fiesta.jpg" />
       </ng-template>
+
       <ion-card-content>
-        <!-- <ion-grid>
-          <ion-row>
-            <ion-col>
-              <button ion-button icon-only (click)="regularShare(i)" color="primary" clear>
-                <ion-icon class="share-icon" name="share"></ion-icon>
-              </button>
-            </ion-col>
-            <ion-col>
-              <button ion-button icon-only (click)="facebookShare(i)" color="primary" clear>
-                <ion-icon class="share-icon" name="logo-facebook"></ion-icon>
-              </button>
-            </ion-col>
-          </ion-row>
-        </ion-grid> -->
+        <div class="share-bar">
+          <button ion-button clear icon-only (click)="regularShare(i); $event.stopPropagation()">
+            <ion-icon name="share"></ion-icon>
+          </button>
+          <button ion-button clear icon-only (click)="facebookShare(i); $event.stopPropagation()">
+            <ion-icon name="logo-facebook"></ion-icon>
+          </button>
+        </div>
+
         <ion-icon [name]="event.isFavorite ? 'star' : 'star-outline'" item-start color="secondary"></ion-icon>
-        <ion-card-title>
-          {{ event.title }}
-        </ion-card-title>
+        <ion-card-title>{{ event.title }}</ion-card-title>
         <p>{{ event.event_date }}</p>
         <p>{{ event.description }}</p>
       </ion-card-content>
     </ion-card>
-  </ion-list>
-  <ion-list>
-    <ion-item *ngFor="let item of filteredItems">
-      {{ item.title }} - {{ item.event_date }}
-    </ion-item>
+
   </ion-list>
   <div *ngIf="!events.length" class="skeleton-container">
     <!-- Skeleton Text -->

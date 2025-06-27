@@ -51,8 +51,8 @@ export class EventDetailsPage {
     );
 
     // Parse to int
-    this.event.location_lat = this.event.location_lat ? parseFloat(this.event.location_lat.trim()) : 0;
-    this.event.location_lng = this.event.location_lng ? parseFloat(this.event.location_lng.trim()) : 0;
+    this.event.location_lat = parseFloat((this.event.location_lat || '').toString().trim()) || 0;
+    this.event.location_lng = parseFloat((this.event.location_lng || '').toString().trim()) || 0;
 
     const url = `https://maps.google.com/maps?q=${this.event.location_lat},${this.event.location_lng}&z=15&output=embed`;
     this.mapUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
@@ -81,15 +81,18 @@ export class EventDetailsPage {
       if (isFav) {
         this.favoriteProvider.removeFavorite(this.event).then(() => {
           this.event.isFavorite = false;
+          if (this.callback) this.callback(this.event);
         });
       } else {
         this.favoriteProvider.addFavorite(this.event).then(() => {
           this.event.isFavorite = true;
+          if (this.callback) this.callback(this.event);
         });
       }
     }).catch(error => {
       console.error('Error toggling favorite', error);
     });
   }
+
 
 }
